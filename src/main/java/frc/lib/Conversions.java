@@ -42,7 +42,7 @@ public class Conversions {
      * @return Revolutions of Mechanism
      */
      public static double falconToRevolutions(double positionCounts, double gearRatio) {
-        double motorRevolutions = positionCounts * (600.0 / 2048.0);        
+        double motorRevolutions = positionCounts / 2048.0;        
         double mechRevolutions = motorRevolutions / gearRatio;
         return mechRevolutions;
     }
@@ -78,7 +78,7 @@ public class Conversions {
      */
     public static double falconToMeters(double positioncounts, double circumference, double gearRatio){
         double wheelRevolutions = falconToRevolutions(positioncounts, gearRatio);
-        double wheelMeters = (wheelRevolutions * circumference) / 60;
+        double wheelMeters = (wheelRevolutions * circumference);
         return wheelMeters;
     }
 
