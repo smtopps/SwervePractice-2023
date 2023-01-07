@@ -15,12 +15,10 @@ import frc.robot.Constants;
 public class CANdleSubsystem extends SubsystemBase {
 
   private final CANdle candle = new CANdle(Constants.CANDLE_ID, "canivore");
-  //private final CANdle candle = new CANdle(Constants.CANDLE_ID);
 
   /** Creates a new CANdleSubsystem. */
   public CANdleSubsystem() {
     candle.configFactoryDefault();
-    //candle.configBrightnessScalar(brightness);
     candle.configStatusLedState(false);
     candle.configV5Enabled(false);
     candle.configVBatOutput(VBatOutputMode.Off);

@@ -51,7 +51,6 @@ public class RobotContainer {
 
   //Auto Stuff
   private final TestPath testPath = new TestPath(swerveSubsystem, poseEstimator);
-  //SendableChooser<Command> chooser = new SendableChooser<>();
   SendableChooser<String> chooser = new SendableChooser<>();
 
   //On The Fly Trajectory Stuff
@@ -70,7 +69,6 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    //chooser.setDefaultOption("Triangle Path", testPath);
     chooser.setDefaultOption("Blue1", "Blue1");
     chooser.addOption("Blue2", "Blue2");
     SmartDashboard.putData(chooser);
@@ -133,6 +131,5 @@ public class RobotContainer {
     }else{
       return new PrintCommand("Nothing");
     }
-    //return chooser.getSelected();
   }
 }
