@@ -35,7 +35,7 @@ public class PoseEstimator extends SubsystemBase {
   private final SwerveSubsystem swerveSubsystem;
   private final Pigeon2Subsystem pigeon2Subsystem;
   
-  private final PhotonCamera photonCamera = new PhotonCamera("gloworm");;
+  private final PhotonCamera photonCamera = new PhotonCamera("OV5647");;
 
   // Physical location of the camera on the robot, relative to the center of the robot.
   private final Transform3d cameraToRobot = new Transform3d(
@@ -87,6 +87,7 @@ public class PoseEstimator extends SubsystemBase {
         Pose3d targetPose = targetPoses.get(fiducialId);
         Transform3d camToTargetTrans = bestTarget.getBestCameraToTarget();
         Pose3d camPose = targetPose.transformBy(camToTargetTrans.inverse());
+        //Pose3d camPose = targetPose.transformBy(camToTargetTrans);
         Pose3d robotPose = camPose.transformBy(cameraToRobot);
         poseEstimator.addVisionMeasurement(robotPose.toPose2d(), imageCaptureTime);
         //SmartDashboard.putString("Pose3d", robotPose.toString());
