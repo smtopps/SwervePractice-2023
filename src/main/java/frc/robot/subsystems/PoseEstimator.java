@@ -87,7 +87,6 @@ public class PoseEstimator extends SubsystemBase {
         Pose3d targetPose = targetPoses.get(fiducialId);
         Transform3d camToTargetTrans = bestTarget.getBestCameraToTarget();
         Pose3d camPose = targetPose.transformBy(camToTargetTrans.inverse());
-        //Pose3d camPose = targetPose.transformBy(camToTargetTrans);
         Pose3d robotPose = camPose.transformBy(cameraToRobot);
         poseEstimator.addVisionMeasurement(robotPose.toPose2d(), imageCaptureTime);
         //SmartDashboard.putString("Pose3d", robotPose.toString());

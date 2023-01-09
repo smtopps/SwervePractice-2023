@@ -20,8 +20,9 @@ public class CANdleSubsystem extends SubsystemBase {
   public CANdleSubsystem() {
     candle.configFactoryDefault();
     candle.configStatusLedState(false);
-    candle.configV5Enabled(false);
+    candle.configV5Enabled(true);
     candle.configVBatOutput(VBatOutputMode.Off);
+    candle.configBrightnessScalar(1);
     setDefult();
   }
 
@@ -37,7 +38,7 @@ public class CANdleSubsystem extends SubsystemBase {
 
   public void setDefult() {
     if(DriverStation.getAlliance() == Alliance.Blue) {
-      candle.setLEDs(0, 0, 255, 0, 0, 8); //51
+      candle.setLEDs(0, 0, 255, 0, 0, 8);
     }else{
       candle.setLEDs(255, 0, 0, 0, 0, 8);
     }
