@@ -53,10 +53,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void setModuleStates(SwerveModuleState[] states) {
     SwerveDriveKinematics.desaturateWheelSpeeds(states, SwerveConstants.MAX_VELOCITY_METERS_PER_SECOND);
-    swerveModules[0].setDesiredState(states[0], false);
-    swerveModules[1].setDesiredState(states[1], false);
-    swerveModules[2].setDesiredState(states[2], false);
-    swerveModules[3].setDesiredState(states[3], false);
+    swerveModules[0].setDesiredState(states[0], true);
+    swerveModules[1].setDesiredState(states[1], true);
+    swerveModules[2].setDesiredState(states[2], true);
+    swerveModules[3].setDesiredState(states[3], true);
   }
 
   public void drive(ChassisSpeeds chassisSpeeds) {
@@ -111,7 +111,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     PPSwerveControllerCommand swerveControllerCommand = new PPSwerveControllerCommand(
       trajectory,
-      () -> PoseEstimator.getCurrentPose(),
+      () -> Limelight.getCurrentPose(),
       SwerveConstants.KINEMATICS,
       xController,
       yController,
@@ -136,7 +136,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public Rotation2d getCurrentChassisHeading() {
     ChassisSpeeds currentSpeeds = SwerveConstants.KINEMATICS.toChassisSpeeds(this.getStates());
     Rotation2d robotHeading = new Rotation2d(Math.atan2(currentSpeeds.vyMetersPerSecond, currentSpeeds.vxMetersPerSecond));
-    Rotation2d currentHeading = robotHeading.plus(PoseEstimator.getCurrentPose().getRotation());
+    Rotation2d currentHeading = robotHeading.plus(Limelight.getCurrentPose().getRotation());
     return currentHeading;
   }
 }

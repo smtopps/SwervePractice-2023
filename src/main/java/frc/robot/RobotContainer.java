@@ -28,8 +28,8 @@ import frc.robot.commands.LockDrive;
 import frc.robot.commands.ToggleFieldRelative;
 import frc.robot.commands.SetPose;
 import frc.robot.subsystems.CANdleSubsystem;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Pigeon2Subsystem;
-import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.SwerveSubsystem;
 
 /**
@@ -46,11 +46,11 @@ public class RobotContainer {
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final Pigeon2Subsystem pigeon2Subsystem = new Pigeon2Subsystem();
-  private final PoseEstimator poseEstimator = new PoseEstimator(swerveSubsystem, pigeon2Subsystem);
+  private final Limelight limelight = new Limelight(swerveSubsystem, pigeon2Subsystem);
   private final CANdleSubsystem candleSubsystem = new CANdleSubsystem();
 
   //Auto Stuff
-  private final TestPath testPath = new TestPath(swerveSubsystem, poseEstimator);
+  private final TestPath testPath = new TestPath(swerveSubsystem, limelight);
   SendableChooser<String> chooser = new SendableChooser<>();
 
   //On The Fly Trajectory Stuff
@@ -60,7 +60,7 @@ public class RobotContainer {
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(new DriveWithJoysticks(
       swerveSubsystem,
-      poseEstimator,
+      limelight,
       () -> -driverController.getLeftX(),
       () -> -driverController.getLeftY(),
       () -> -driverController.getRightX(),
@@ -81,13 +81,13 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driverController, 8).onTrue(new SetPose(poseEstimator, new Pose2d(0.0, 0.0, new Rotation2d(0.0))));
+    new JoystickButton(driverController, 8).onTrue(new SetPose(limelight, new Pose2d(0.0, 0.0, new Rotation2d(0.0))));
     new JoystickButton(driverController, 6).whileTrue(new ChangeMaxSpeed(Constants.BOOST_SPEED));
     new JoystickButton(driverController, 5).whileTrue(new ChangeMaxSpeed(Constants.PERCISION_SPEED));
     new JoystickButton(driverController, 3).onTrue(new ToggleFieldRelative());
     new JoystickButton(driverController, XboxController.Button.kA.value).whileTrue(new LockDrive(swerveSubsystem));
     new JoystickButton(driverController, 4)
-      .onTrue(new DriveToLoadingStation(swerveSubsystem, poseEstimator, candleSubsystem))
+      .onTrue(new DriveToLoadingStation(swerveSubsystem, limelight, candleSubsystem))
       .onFalse(new InstantCommand(() -> {
         if(swerveSubsystem.getCurrentCommand() != null){
           swerveSubsystem.getCurrentCommand().cancel();
@@ -111,8 +111,8 @@ public class RobotContainer {
 
     // Create the AutoBuilder.
     SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
-      poseEstimator::getPose, // Pose2d supplier
-      poseEstimator::setPose, // Pose2d consumer, used to reset odometry at the beginning of auto
+      limelight::getPose, // Pose2d supplier
+      limelight::setPose, // Pose2d consumer, used to reset odometry at the beginning of auto
       Constants.SwerveConstants.KINEMATICS, // SwerveDriveKinematics
       new PIDConstants(Constants.AutoConstants.kPXController, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
       new PIDConstants(Constants.AutoConstants.kPThetaController, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)

@@ -13,12 +13,12 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.subsystems.PoseEstimator;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class DriveWithJoysticks extends CommandBase {
   private final SwerveSubsystem swerveSubsystem;
-  private final PoseEstimator poseEstimator;
+  private final Limelight limelight;
 
   private final DoubleSupplier translationX;
   private final DoubleSupplier translationY;
@@ -29,9 +29,9 @@ public class DriveWithJoysticks extends CommandBase {
   private final SlewRateLimiter xLimiter, yLimiter, turnLimiter;
 
   /** Creates a new DriveWithJoysticks. */
-  public DriveWithJoysticks(SwerveSubsystem swerveSubsystem, PoseEstimator poseEstimator, DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier rotation, BooleanSupplier relative, DoubleSupplier maxSpeed) {
+  public DriveWithJoysticks(SwerveSubsystem swerveSubsystem, Limelight limelight, DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier rotation, BooleanSupplier relative, DoubleSupplier maxSpeed) {
     this.swerveSubsystem = swerveSubsystem;
-    this.poseEstimator = poseEstimator;
+    this.limelight = limelight;
     this.translationX = translationX;
     this.translationY = translationY;
     this.rotation = rotation;
@@ -55,7 +55,7 @@ public class DriveWithJoysticks extends CommandBase {
       modifyAxis(translationY.getAsDouble(), maxSpeed.getAsDouble(), yLimiter) * SwerveConstants.MAX_VELOCITY_METERS_PER_SECOND,
       modifyAxis(translationX.getAsDouble(), maxSpeed.getAsDouble(), xLimiter) * SwerveConstants.MAX_VELOCITY_METERS_PER_SECOND,
       modifyAxis(rotation.getAsDouble(), maxSpeed.getAsDouble(), turnLimiter) * SwerveConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-      poseEstimator.getPoseRotation()));
+      limelight.getPoseRotation()));
     } else {
       swerveSubsystem.drive(new ChassisSpeeds(
         modifyAxis(translationY.getAsDouble(), maxSpeed.getAsDouble(), yLimiter) * SwerveConstants.MAX_VELOCITY_METERS_PER_SECOND,

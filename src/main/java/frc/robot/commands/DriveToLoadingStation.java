@@ -15,21 +15,21 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.CANdleSubsystem;
-import frc.robot.subsystems.PoseEstimator;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class DriveToLoadingStation extends CommandBase {
   private final SwerveSubsystem swerveSubsystem;
-  private final PoseEstimator poseEstimator;
+  private final Limelight limelight;
   private final CANdleSubsystem candleSubsystem;
 
   private final Pose2d finalPose2d = new Pose2d(Units.feetToMeters(52.0), Units.feetToMeters(13.5), new Rotation2d(Units.degreesToRadians(0.0)));
   private PathPlannerTrajectory trajectory;
 
   /** Creates a new DriveToLoadingStation. */
-  public DriveToLoadingStation(SwerveSubsystem swerveSubsystem, PoseEstimator poseEstimator, CANdleSubsystem candleSubsystem) {
+  public DriveToLoadingStation(SwerveSubsystem swerveSubsystem, Limelight limelight, CANdleSubsystem candleSubsystem) {
     this.swerveSubsystem = swerveSubsystem;
-    this.poseEstimator = poseEstimator;
+    this.limelight = limelight;
     this.candleSubsystem = candleSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -39,10 +39,10 @@ public class DriveToLoadingStation extends CommandBase {
   public void initialize() {
     trajectory = PathPlanner.generatePath(
       new PathConstraints(3, 1),
-      new PathPoint(new Translation2d(poseEstimator.getPoseX(), poseEstimator.getPoseY()), swerveSubsystem.getCurrentChassisHeading(), poseEstimator.getPoseRotation(), swerveSubsystem.getCurrentChassisSpeeds()),
+      new PathPoint(new Translation2d(limelight.getPoseX(), limelight.getPoseY()), swerveSubsystem.getCurrentChassisHeading(), limelight.getPoseRotation(), swerveSubsystem.getCurrentChassisSpeeds()),
       new PathPoint(new Translation2d(finalPose2d.getX()-0.25, finalPose2d.getY()), finalPose2d.getRotation(), finalPose2d.getRotation()),
       new PathPoint(new Translation2d(finalPose2d.getX(), finalPose2d.getY()), finalPose2d.getRotation(), finalPose2d.getRotation()));
-      poseEstimator.setTrajectoryField2d(trajectory);
+      limelight.setTrajectoryField2d(trajectory);
       candleSubsystem.setLED(0, 255, 0, 0, 7);
       swerveSubsystem.createCommandForTrajectory(trajectory).schedule();
   }

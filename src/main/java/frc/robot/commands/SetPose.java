@@ -6,23 +6,23 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.PoseEstimator;
+import frc.robot.subsystems.Limelight;
 
 public class SetPose extends CommandBase {
-  private final PoseEstimator poseEstimator;
+  private final Limelight limelight;
   private final Pose2d pose2d;
   /** Creates a new SetPose. */
-  public SetPose(PoseEstimator poseEstimator, Pose2d pose2d) {
-    this.poseEstimator = poseEstimator;
+  public SetPose(Limelight limelight, Pose2d pose2d) {
+    this.limelight = limelight;
     this.pose2d = pose2d;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(poseEstimator);
+    addRequirements(limelight);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    poseEstimator.setPose(pose2d);
+    limelight.setPose(pose2d);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

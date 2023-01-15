@@ -8,6 +8,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.SetPose;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -16,12 +17,12 @@ import frc.robot.subsystems.SwerveSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class TestPath extends SequentialCommandGroup {
   /** Creates a new TestPath. */
-  public TestPath(SwerveSubsystem swerveSubsystem, PoseEstimator poseEstimator) {
+  public TestPath(SwerveSubsystem swerveSubsystem, Limelight limelight) {
     PathPlannerTrajectory trajectory1 = swerveSubsystem.loadTrajectoryFromFile("TestPath", 2, 2);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new SetPose(poseEstimator, trajectory1.getInitialPose()),
+      new SetPose(limelight, trajectory1.getInitialPose()),
       swerveSubsystem.createCommandForTrajectory(trajectory1)
     );
   }

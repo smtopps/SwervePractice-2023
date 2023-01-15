@@ -6,23 +6,23 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.PoseEstimator;
+import frc.robot.subsystems.Limelight;
 
 public class SetTrajectoryField2d extends CommandBase {
-  private final PoseEstimator poseEstimator;
+  private final Limelight limelight;
   private final Trajectory trajectory;
   /** Creates a new SetTrajectoryField2d. */
-  public SetTrajectoryField2d(PoseEstimator poseEstimator, Trajectory trajectory) {
-    this.poseEstimator = poseEstimator;
+  public SetTrajectoryField2d(Limelight limelight, Trajectory trajectory) {
+    this.limelight = limelight;
     this.trajectory = trajectory;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(poseEstimator);
+    addRequirements(limelight);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    poseEstimator.setTrajectoryField2d(trajectory);
+    limelight.setTrajectoryField2d(trajectory);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
