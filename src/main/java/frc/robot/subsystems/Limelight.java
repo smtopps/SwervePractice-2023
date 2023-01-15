@@ -82,13 +82,19 @@ public class Limelight extends SubsystemBase {
   public static Pose3d getCamPose3d() {
     double[] temp = {0.0,0.0,0.0,0.0,0.0,0.0};//Defult getEntry
     NetworkTableEntry valueOfPoses = table.getEntry("botpose");
-    double[] result = valueOfPoses.getDoubleArray(temp);
+    //double[] result = valueOfPoses.getDoubleArray(temp);
+    double[] result = new double[valueOfPoses.getDoubleArray(temp).length];
+    System.out.println(result.length);//troubleshooting
+    for(int i = 0; i < result.length; i++){
+      result[i] = valueOfPoses.getDoubleArray(temp)[i];
+      System.out.println("result at " + i + ": " + result[i]);//troubleshooting
+    }
     double[] result2 = result;
         Translation3d translation3d;
 
     try{
-          translation3d = new Translation3d(result2[0], result2[1], result2[2]);
-
+//          translation3d = new Translation3d(result2[0], result2[1], result2[2]);
+          translation3d = new Translation3d(result[0], result[1], result[2]);
     }catch(Exception e){
       System.out.println("That darn pose error");
       System.out.println(e.getMessage());
