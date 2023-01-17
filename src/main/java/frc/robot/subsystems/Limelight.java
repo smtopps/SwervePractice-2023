@@ -17,7 +17,6 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -33,7 +32,7 @@ public class Limelight extends SubsystemBase {
   private final Pigeon2Subsystem pigeon2Subsystem;
   
   static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-  static NetworkTableEntry tv = table.getEntry("tv");
+  static NetworkTableEntry valueOfPoses = table.getEntry("botpose");
 
   // Kalman Filter Configuration. These can be "tuned-to-taste" based on how much you trust your various sensors. 
   // Smaller numbers will cause the filter to "trust" the estimate from that particular component more than the others. 
@@ -65,10 +64,17 @@ public class Limelight extends SubsystemBase {
     
     // Update pose estimator with visible targets
     // latest pipeline result
-    if(tv.getDouble(0.0) == 1) {
+    double[] temp = {0.0,0.0,0.0,0.0,0.0,0.0};//Defult getEntry
+    double[] result = valueOfPoses.getDoubleArray(temp);
+    double timestamp = Timer.getFPGATimestamp();
+    if(result.length == 6) {
       SmartDashboard.putBoolean("Camera Has Target", true);
-      getCamPose3d();
-      //poseEstimator.addVisionMeasurement(getCamPose3d().toPose2d(), Timer.getFPGATimestamp());
+      Translation3d translation3d = new Translation3d(result[0]+Units.feetToMeters(27.0), result[1]+Units.feetToMeters(13.5), result[2]);
+      SmartDashboard.putString("translation", translation3d.toString());
+      Rotation3d rotation3d = new Rotation3d(Units.degreesToRadians(result[3]), Units.degreesToRadians(result[4]), Units.degreesToRadians(result[5]));
+      SmartDashboard.putString("rotation", rotation3d.toString());
+      Pose3d pose3d = new Pose3d(translation3d, rotation3d);
+      poseEstimator.addVisionMeasurement(pose3d.toPose2d(), timestamp);
     }else{
       SmartDashboard.putBoolean("Camera Has Target", false);
     }
@@ -77,31 +83,6 @@ public class Limelight extends SubsystemBase {
     field2d.setRobotPose(poseEstimator.getEstimatedPosition());
     SmartDashboard.putString("Pose", poseEstimator.getEstimatedPosition().toString());
     // This method will be called once per scheduler run
-  }
-
-  public static Pose3d getCamPose3d() {
-    double[] temp = {0.0,0.0,0.0,0.0,0.0,0.0};//Defult getEntry
-    NetworkTableEntry valueOfPoses = table.getEntry("botpose");
-    //double[] result = valueOfPoses.getDoubleArray(temp);
-    double[] result = new double[valueOfPoses.getDoubleArray(temp).length];
-    System.out.println(result.length);//troubleshooting
-    for(int i = 0; i < result.length; i++){
-      result[i] = valueOfPoses.getDoubleArray(temp)[i];
-      System.out.println("result at " + i + ": " + result[i]);//troubleshooting
-    }
-    double[] result2 = result;
-        Translation3d translation3d;
-
-    try{
-//          translation3d = new Translation3d(result2[0], result2[1], result2[2]);
-          translation3d = new Translation3d(result[0], result[1], result[2]);
-    }catch(Exception e){
-      System.out.println("That darn pose error");
-      System.out.println(e.getMessage());
-    }
-    //Rotation3d rotation3d = new Rotation3d(result[3], result[4], result[5]);
-    //return new Pose3d(translation3d, rotation3d);
-    return new Pose3d();
   }
 
   public static Pose2d getCurrentPose() {
