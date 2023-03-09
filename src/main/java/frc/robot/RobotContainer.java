@@ -86,6 +86,7 @@ public class RobotContainer {
     new JoystickButton(driverController, 5).whileTrue(new ChangeMaxSpeed(Constants.PERCISION_SPEED));
     new JoystickButton(driverController, 3).onTrue(new ToggleFieldRelative());
     new JoystickButton(driverController, XboxController.Button.kA.value).whileTrue(new LockDrive(swerveSubsystem));
+    //following has an issue where the release is not always registered.  Need to figure out correct code.
     new JoystickButton(driverController, 4)
       .onTrue(new DriveToLoadingStation(swerveSubsystem, limelight, candleSubsystem))
       .onFalse(new InstantCommand(() -> {
